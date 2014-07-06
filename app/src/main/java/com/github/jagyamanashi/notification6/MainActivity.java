@@ -1,6 +1,7 @@
-package com.github.jagyamanashi.notification1;
+package com.github.jagyamanashi.notification6;
 
 import android.app.Activity;
+import android.app.Notification;
 import android.app.PendingIntent;
 import android.content.Intent;
 import android.os.Bundle;
@@ -53,9 +54,7 @@ public class MainActivity extends Activity {
     }
 
     private void showNotification() {
-        int notificationId = 001;
-        String eventTitle = "Event Title";
-        String eventLocation = "Event Location";
+        int notificationId = 006;
 
         Intent viewIntent = new Intent(this, MainActivity.class);
         PendingIntent viewPendingIntent =
@@ -63,14 +62,30 @@ public class MainActivity extends Activity {
 
         NotificationCompat.Builder notificationBuilder =
                 new NotificationCompat.Builder(this)
-                .setSmallIcon(R.drawable.ic_stat_smile)
-                .setContentTitle(eventTitle)
-                .setContentText(eventLocation)
-                .setContentIntent(viewPendingIntent);
+                        .setSmallIcon(R.drawable.ic_stat_smile)
+                        .setContentTitle("Page 1")
+                        .setContentText("Short message")
+                        .setContentIntent(viewPendingIntent);
+
+        NotificationCompat.BigTextStyle secondPageStyle = new NotificationCompat.BigTextStyle();
+        secondPageStyle.setBigContentTitle("Page 2")
+                .bigText("A lot of text...");
+
+        Notification secondPageNotification =
+                new NotificationCompat.Builder(this)
+                        .setStyle(secondPageStyle)
+                        .build();
+
+        Notification twoPageNotification =
+                new NotificationCompat.WearableExtender()
+                        .addPage(secondPageNotification)
+                        .extend(notificationBuilder)
+                        .build();
 
         NotificationManagerCompat notificationManager =
                 NotificationManagerCompat.from(this);
 
-        notificationManager.notify(notificationId, notificationBuilder.build());
+        notificationManager = NotificationManagerCompat.from(this);
+        notificationManager.notify(notificationId, twoPageNotification);
     }
 }
